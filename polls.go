@@ -2,9 +2,6 @@ package mastodon
 
 import (
 	"context"
-	"fmt"
-	"net/http"
-	"net/url"
 	"time"
 )
 
@@ -30,25 +27,12 @@ type PollOption struct {
 
 // GetPoll returns poll specified by id.
 func (c *Client) GetPoll(ctx context.Context, id ID) (*Poll, error) {
-	var poll Poll
-	err := c.doAPI(ctx, http.MethodGet, fmt.Sprintf("/api/v1/polls/%s", id), nil, &poll, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &poll, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PollVote votes on a poll specified by id, choices is the Poll.Options index to vote on
 func (c *Client) PollVote(ctx context.Context, id ID, choices ...int) (*Poll, error) {
-	params := url.Values{}
-	for _, c := range choices {
-		params.Add("choices[]", fmt.Sprintf("%d", c))
-	}
-
-	var poll Poll
-	err := c.doAPI(ctx, http.MethodPost, fmt.Sprintf("/api/v1/polls/%s/votes", url.PathEscape(string(id))), params, &poll, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &poll, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

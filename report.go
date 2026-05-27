@@ -2,8 +2,6 @@ package mastodon
 
 import (
 	"context"
-	"net/http"
-	"net/url"
 )
 
 // Report holds information for a mastodon report.
@@ -14,26 +12,12 @@ type Report struct {
 
 // GetReports returns report of the current user.
 func (c *Client) GetReports(ctx context.Context) ([]*Report, error) {
-	var reports []*Report
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/reports", nil, &reports, nil)
-	if err != nil {
-		return nil, err
-	}
-	return reports, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Report reports the report
 func (c *Client) Report(ctx context.Context, accountID ID, ids []ID, comment string) (*Report, error) {
-	params := url.Values{}
-	params.Set("account_id", string(accountID))
-	for _, id := range ids {
-		params.Add("status_ids[]", string(id))
-	}
-	params.Set("comment", comment)
-	var report Report
-	err := c.doAPI(ctx, http.MethodPost, "/api/v1/reports", params, &report, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &report, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -2,7 +2,6 @@ package mastodon
 
 import (
 	"context"
-	"net/http"
 )
 
 // Instance holds information for a mastodon instance.
@@ -39,18 +38,12 @@ type InstanceStats struct {
 
 // GetInstance returns Instance.
 func (c *Client) GetInstance(ctx context.Context) (*Instance, error) {
-	var instance Instance
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/instance", nil, &instance, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &instance, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetConfig returns InstanceConfig.
-func (c *Instance) GetConfig() *InstanceConfig {
-	return c.Configuration
-}
+func (c *Instance) GetConfig() *InstanceConfig { _ = "STUB: not implemented"; return nil }
 
 // WeeklyActivity holds information for mastodon weekly activity.
 type WeeklyActivity struct {
@@ -62,20 +55,12 @@ type WeeklyActivity struct {
 
 // GetInstanceActivity returns instance activity.
 func (c *Client) GetInstanceActivity(ctx context.Context) ([]*WeeklyActivity, error) {
-	var activity []*WeeklyActivity
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/instance/activity", nil, &activity, nil)
-	if err != nil {
-		return nil, err
-	}
-	return activity, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetInstancePeers returns instance peers.
 func (c *Client) GetInstancePeers(ctx context.Context) ([]string, error) {
-	var peers []string
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/instance/peers", nil, &peers, nil)
-	if err != nil {
-		return nil, err
-	}
-	return peers, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

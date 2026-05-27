@@ -3,12 +3,7 @@ package mastodon
 import (
 	"context"
 	"crypto/ecdsa"
-	"encoding/base64"
-	"fmt"
 	"iter"
-	"net/http"
-	"net/url"
-	"strconv"
 	"time"
 )
 
@@ -47,151 +42,70 @@ type NotificationFilter struct {
 
 // Notifications iterate over notifications.
 func (c *Client) Notifications(ctx context.Context, filter *NotificationFilter, pg *Pagination) iter.Seq2[*Notification, error] {
-	return c.notificationsFilter(ctx, filter, pg)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (c *Client) notificationsFilter(ctx context.Context, qry *NotificationFilter, pg *Pagination) iter.Seq2[*Notification, error] {
-	return func(yield func(*Notification, error) bool) {
-		var zero Pagination
-		if pg == nil {
-			pg = &Pagination{}
-		}
-		for {
-			vs, err := c.getNotificationsFilter(ctx, qry, pg)
-			if err != nil {
-				_ = yield(nil, err)
-				return
-			}
-
-			for _, v := range vs {
-				if !yield(v, nil) {
-					return
-				}
-			}
-
-			if *pg == zero {
-				return
-			}
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetNotifications returns notifications.
 func (c *Client) GetNotifications(ctx context.Context, pg *Pagination) ([]*Notification, error) {
-	return c.getNotificationsFilter(ctx, nil, pg)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetNotificationsExclude returns notifications with excluded notifications
 func (c *Client) GetNotificationsExclude(ctx context.Context, exclude *[]string, pg *Pagination) ([]*Notification, error) {
-	qry := &NotificationFilter{}
-	if exclude != nil {
-		qry.Excludes = *exclude
-	}
-	return c.getNotificationsFilter(ctx, qry, pg)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Client) getNotificationsFilter(ctx context.Context, qry *NotificationFilter, pg *Pagination) ([]*Notification, error) {
-	var notifications []*Notification
-	params := url.Values{}
-	if qry != nil {
-		for _, typ := range qry.Includes {
-			params.Add("types[]", typ)
-		}
-		for _, ex := range qry.Excludes {
-			params.Add("exclude_types[]", ex)
-		}
-	}
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/notifications", params, &notifications, pg)
-	if err != nil {
-		return nil, err
-	}
-	return notifications, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetNotification returns notification.
 func (c *Client) GetNotification(ctx context.Context, id ID) (*Notification, error) {
-	var notification Notification
-	err := c.doAPI(ctx, http.MethodGet, fmt.Sprintf("/api/v1/notifications/%v", id), nil, &notification, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &notification, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // DismissNotification deletes a single notification.
 func (c *Client) DismissNotification(ctx context.Context, id ID) error {
-	return c.doAPI(ctx, http.MethodPost, fmt.Sprintf("/api/v1/notifications/%v/dismiss", id), nil, nil, nil)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ClearNotifications clears notifications.
 func (c *Client) ClearNotifications(ctx context.Context) error {
-	return c.doAPI(ctx, http.MethodPost, "/api/v1/notifications/clear", nil, nil, nil)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AddPushSubscription adds a new push subscription.
 func (c *Client) AddPushSubscription(ctx context.Context, endpoint string, public ecdsa.PublicKey, shared []byte, alerts PushAlerts) (*PushSubscription, error) {
-	var subscription PushSubscription
-	pk, err := public.ECDH()
-	if err != nil {
-		return nil, fmt.Errorf("could not retrieve ecdh public key: %w", err)
-	}
-	params := url.Values{}
-	params.Add("subscription[endpoint]", endpoint)
-	params.Add("subscription[keys][p256dh]", base64.RawURLEncoding.EncodeToString(pk.Bytes()))
-	params.Add("subscription[keys][auth]", base64.RawURLEncoding.EncodeToString(shared))
-	if alerts.Follow != nil {
-		params.Add("data[alerts][follow]", strconv.FormatBool(bool(*alerts.Follow)))
-	}
-	if alerts.Favourite != nil {
-		params.Add("data[alerts][favourite]", strconv.FormatBool(bool(*alerts.Favourite)))
-	}
-	if alerts.Reblog != nil {
-		params.Add("data[alerts][reblog]", strconv.FormatBool(bool(*alerts.Reblog)))
-	}
-	if alerts.Mention != nil {
-		params.Add("data[alerts][mention]", strconv.FormatBool(bool(*alerts.Mention)))
-	}
-	err = c.doAPI(ctx, http.MethodPost, "/api/v1/push/subscription", params, &subscription, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &subscription, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UpdatePushSubscription updates which type of notifications are sent for the active push subscription.
 func (c *Client) UpdatePushSubscription(ctx context.Context, alerts *PushAlerts) (*PushSubscription, error) {
-	var subscription PushSubscription
-	params := url.Values{}
-	if alerts.Follow != nil {
-		params.Add("data[alerts][follow]", strconv.FormatBool(bool(*alerts.Follow)))
-	}
-	if alerts.Mention != nil {
-		params.Add("data[alerts][favourite]", strconv.FormatBool(bool(*alerts.Favourite)))
-	}
-	if alerts.Reblog != nil {
-		params.Add("data[alerts][reblog]", strconv.FormatBool(bool(*alerts.Reblog)))
-	}
-	if alerts.Mention != nil {
-		params.Add("data[alerts][mention]", strconv.FormatBool(bool(*alerts.Mention)))
-	}
-	err := c.doAPI(ctx, http.MethodPut, "/api/v1/push/subscription", params, &subscription, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &subscription, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // RemovePushSubscription deletes the active push subscription.
 func (c *Client) RemovePushSubscription(ctx context.Context) error {
-	return c.doAPI(ctx, http.MethodDelete, "/api/v1/push/subscription", nil, nil, nil)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetPushSubscription retrieves information about the active push subscription.
 func (c *Client) GetPushSubscription(ctx context.Context) (*PushSubscription, error) {
-	var subscription PushSubscription
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/push/subscription", nil, &subscription, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &subscription, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -2,11 +2,7 @@ package mastodon
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
-	"net/url"
-	"path"
-	"strings"
 )
 
 // AppConfig is a setting for registering applications.
@@ -40,59 +36,8 @@ type Application struct {
 
 // RegisterApp returns the mastodon application.
 func RegisterApp(ctx context.Context, appConfig *AppConfig) (*Application, error) {
-	params := url.Values{}
-	params.Set("client_name", appConfig.ClientName)
-	if appConfig.RedirectURIs == "" {
-		params.Set("redirect_uris", "urn:ietf:wg:oauth:2.0:oob")
-	} else {
-		params.Set("redirect_uris", appConfig.RedirectURIs)
-	}
-	params.Set("scopes", appConfig.Scopes)
-	params.Set("website", appConfig.Website)
-
-	u, err := url.Parse(appConfig.Server)
-	if err != nil {
-		return nil, err
-	}
-	u.Path = path.Join(u.Path, "/api/v1/apps")
-
-	req, err := http.NewRequest(http.MethodPost, u.String(), strings.NewReader(params.Encode()))
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	resp, err := appConfig.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, parseAPIError("bad request", resp)
-	}
-
-	var app Application
-	err = json.NewDecoder(resp.Body).Decode(&app)
-	if err != nil {
-		return nil, err
-	}
-
-	u, err = url.Parse(appConfig.Server)
-	if err != nil {
-		return nil, err
-	}
-	u.Path = path.Join(u.Path, "/oauth/authorize")
-	u.RawQuery = url.Values{
-		"scope":         {appConfig.Scopes},
-		"response_type": {"code"},
-		"redirect_uri":  {app.RedirectURI},
-		"client_id":     {app.ClientID},
-	}.Encode()
-
-	app.AuthURI = u.String()
-
-	return &app, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ApplicationVerification is mastodon application.
@@ -104,10 +49,6 @@ type ApplicationVerification struct {
 
 // VerifyAppCredentials returns the mastodon application.
 func (c *Client) VerifyAppCredentials(ctx context.Context) (*ApplicationVerification, error) {
-	var application ApplicationVerification
-	err := c.doAPI(ctx, http.MethodGet, "/api/v1/apps/verify_credentials", nil, &application, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &application, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
